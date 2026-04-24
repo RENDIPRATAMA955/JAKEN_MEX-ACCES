@@ -118,7 +118,7 @@ function authenticateToken(req, res, next) {
  * menemukan file index.html di dalam folder public.
  */
 app.get("/", (req, res) => {
-  res.redirect("/index.html");
+  res.redirect("/dashboard.html");
 });
 
 // ============================================
@@ -267,8 +267,10 @@ app.get("/dashboard", authenticateToken, (req, res) => {
 // ============================================
 // Server akan berjalan di PORT yang ditentukan environment variable
 // atau fallback ke 3000 untuk local development
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`✅ Server berjalan di port ${PORT}`);
+  console.log(`🌐 Akses dari HP lain dalam WiFi yang sama:`);
+  console.log(`   http://<IP_KAMU>:${PORT}`);
   console.log("📌 Endpoint yang tersedia:");
   console.log("   POST /register  → Daftar akun baru");
   console.log("   POST /login     → Login dan dapatkan token");
