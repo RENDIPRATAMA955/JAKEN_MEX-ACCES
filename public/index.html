@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - JAKEN MEX ACCES</title>
+  <style>
+    /* Styling dasar agar tampilan rapi di tengah */
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-image: url('MAX.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    .container {
+      position: relative;
+      overflow: hidden;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      width: 300px;
+      animation: unstable 2s infinite ease-in-out;
+      transform-origin: top center;
+      backdrop-filter: blur(6px);
+    }
+    @keyframes unstable {
+      0%, 100% { transform: rotate(0deg) translateY(0); }
+      20% { transform: rotate(1.5deg) translateY(2px); }
+      40% { transform: rotate(-1deg) translateY(4px); }
+      60% { transform: rotate(1deg) translateY(1px); }
+      80% { transform: rotate(-0.5deg) translateY(3px); }
+    }
+    .login-content {
+      position: relative;
+      z-index: 1;
+      color: white;
+    }
+    input {
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    .toggle {
+      color: #ffcc00;
+    }
+    .fire-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      background: linear-gradient(to top, rgba(255, 0, 0, 0.4), rgba(0, 0, 0, 0.4) 80%);
+    }
+    .flame {
+      position: absolute;
+      bottom: -20px;
+      width: 60px;
+      height: 60px;
+      background: radial-gradient(circle, rgba(255, 50, 0, 0.4) 0%, rgba(255, 0, 0, 0.4) 40%, rgba(100, 0, 0, 0.4) 100%);
+      border-radius: 50%;
+      animation: smoke-rise 3s infinite ease-in;
+      filter: blur(8px);
+    }
+    .flame:nth-child(1) { left: 5%; width: 80px; height: 80px; animation-delay: 0s; animation-duration: 2.5s; }
+    .flame:nth-child(2) { left: 20%; width: 100px; height: 100px; animation-delay: 0.5s; animation-duration: 3s; }
+    .flame:nth-child(3) { left: 40%; width: 70px; height: 70px; animation-delay: 1s; animation-duration: 2s; }
+    .flame:nth-child(4) { left: 55%; width: 90px; height: 90px; animation-delay: 0.3s; animation-duration: 3.5s; }
+    .flame:nth-child(5) { left: 75%; width: 110px; height: 110px; animation-delay: 0.8s; animation-duration: 2.8s; }
+    @keyframes smoke-rise {
+      0% { transform: translateY(0) scale(0.8) translateX(0); opacity: 0.6; }
+      50% { transform: translateY(-150px) scale(1.6) translateX(15px); opacity: 0.3; }
+      100% { transform: translateY(-320px) scale(2.5) translateX(-10px); opacity: 0; }
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 5px;
+      background: #007bff;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    button:hover {
+      background: #0056b3;
+      transform: scale(1.03);
+      box-shadow: 0 8px 20px rgba(0, 123, 255, 0.4);
+    }
+    button:active {
+      transform: scale(0.97);
+      box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+    }
+    .error {
+      color: red;
+      text-align: center;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    .success {
+      color: green;
+      text-align: center;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    .toggle {
+      text-align: center;
+      margin-top: 15px;
+      color: #007bff;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .toggle:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="fire-bg">
+      <div class="flame"></div>
+      <div class="flame"></div>
+      <div class="flame"></div>
+      <div class="flame"></div>
+      <div class="flame"></div>
+    </div>
+    <div class="login-content">
+      <!-- Judul form, akan berubah sesuai mode Login/Register -->
+      <h2 id="formTitle">Login</h2>
+
+      <!-- Input username -->
+      <input id="user" placeholder="Username"><br>
+
+      <!-- Input password (type="password" agar karakter disembunyikan) -->
+      <input id="pass" type="password" placeholder="Password"><br>
+
+      <!-- Tombol aksi utama (Login atau Register) -->
+      <button id="actionBtn" onclick="handleAction()">Login</button>
+
+      <!-- Area untuk menampilkan pesan error atau sukses -->
+      <p id="msg" class="error"></p>
+
+      <!-- Tombol toggle antara mode Login dan Register -->
+      <p class="toggle" id="toggleBtn" onclick="toggleMode()">
+        Belum punya akun? Register
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Variabel untuk melacak mode saat ini: 'login' atau 'register'
+    let mode = 'login';
+
+    /**
+     * Fungsi untuk mengganti mode antara Login dan Register.
+     * Mengubah teks judul, tombol, dan link toggle.
+     */
+    function toggleMode() {
+      if (mode === 'login') {
+        mode = 'register';
+        document.getElementById('formTitle').innerText = 'Register';
+        document.getElementById('actionBtn').innerText = 'Register';
+        document.getElementById('toggleBtn').innerText = 'Sudah punya akun? Login';
+      } else {
+        mode = 'login';
+        document.getElementById('formTitle').innerText = 'Login';
+        document.getElementById('actionBtn').innerText = 'Login';
+        document.getElementById('toggleBtn').innerText = 'Belum punya akun? Register';
+      }
+      // Kosongkan pesan saat ganti mode
+      document.getElementById('msg').innerText = '';
+    }
+
+    /**
+     * Fungsi utama yang dipanggil saat tombol ditekan.
+     * Memilih endpoint yang sesuai berdasarkan mode.
+     */
+    async function handleAction() {
+      const username = document.getElementById('user').value.trim();
+      const password = document.getElementById('pass').value;
+      const msgEl = document.getElementById('msg');
+
+      // Validasi sederhana di client-side
+      if (!username || !password) {
+        msgEl.className = 'error';
+        msgEl.innerText = 'Username dan password wajib diisi!';
+        return;
+      }
+
+      // Tentukan endpoint: /login atau /register
+      const endpoint = mode === 'login' ? '/login' : '/register';
+
+      try {
+        // Kirim request POST ke server dengan data JSON
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+
+        // Jika response bukan JSON (misalnya error 400 dengan text), tangani sebagai text
+        const contentType = res.headers.get('content-type');
+        let data;
+        if (contentType && contentType.includes('application/json')) {
+          data = await res.json();
+        } else {
+          data = { message: await res.text() };
+        }
+
+        // Jika response tidak OK (status >= 400), tampilkan pesan error
+        if (!res.ok) {
+          msgEl.className = 'error';
+          msgEl.innerText = data.message || 'Terjadi kesalahan';
+          return;
+        }
+
+        // Jika mode login berhasil, simpan token dan redirect ke dashboard
+        if (mode === 'login') {
+          // Simpan token JWT ke localStorage agar bisa dipakai nanti
+          localStorage.setItem('token', data.token);
+          // Redirect ke situs JAKENS_PUBLIC
+          window.location.href = 'https://rendipratama955.github.io/JAKENS_PUBLIC/';
+        } else {
+          // Jika register berhasil, tampilkan pesan sukses dan beralih ke mode login
+          msgEl.className = 'success';
+          msgEl.innerText = 'Registrasi berhasil! Silakan login.';
+          // Reset input
+          document.getElementById('user').value = '';
+          document.getElementById('pass').value = '';
+          // Otomatis beralih ke mode login setelah 1.5 detik
+          setTimeout(() => {
+            if (mode === 'register') toggleMode();
+          }, 1500);
+        }
+      } catch (err) {
+        // Tangani error jaringan atau server tidak aktif
+        msgEl.className = 'error';
+        msgEl.innerText = 'Gagal terhubung ke server. Pastikan server berjalan.';
+      }
+    }
+  </script>
+</body>
+</html>

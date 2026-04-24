@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - JAKEN MEX ACCES</title>
+  <style>
+    /* Styling dasar dashboard */
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: #e9ecef;
+    }
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      width: 400px;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .btn-primary {
+      background: #28a745;
+      color: white;
+    }
+    .btn-primary:hover {
+      background: #1e7e34;
+    }
+    .btn-danger {
+      background: #dc3545;
+      color: white;
+    }
+    .btn-danger:hover {
+      background: #c82333;
+    }
+    #result {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 5px;
+      background: #f8f9fa;
+      min-height: 50px;
+      word-break: break-word;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Selamat Datang di Dashboard</h2>
+    <p>Halaman ini hanya bisa diakses jika Anda sudah login.</p>
+
+    <!-- Tombol untuk menguji akses ke endpoint /dashboard yang dilindungi JWT -->
+    <button class="btn-primary" onclick="getData()">Cek Akses ke Server</button>
+
+    <!-- Tombol logout: menghapus token dan redirect ke halaman login -->
+    <button class="btn-danger" onclick="logout()">Logout</button>
+
+    <!-- Area untuk menampilkan response dari server -->
+    <div id="result">Klik "Cek Akses ke Server" untuk memverifikasi token.</div>
+  </div>
+
+  <script>
+    /**
+     * GUARD: Cek token JWT saat halaman pertama kali dimuat.
+     * Jika tidak ada token di localStorage, langsung redirect ke halaman login.
+     * Ini mencegah user mengakses dashboard secara manual tanpa login.
+     */
+    (function guard() {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        // Token tidak ada → redirect ke halaman login
+        window.location.href = 'index.html';
+      }
+    })();
+
+    /**
+     * Fungsi untuk mengambil data dari endpoint /dashboard yang dilindungi.
+     * Mengirimkan token JWT di header Authorization dengan format Bearer.
+     */
+    async function getData() {
+      const resultEl = document.getElementById('result');
+      const token = localStorage.getItem('token');
+
+      // Double-check: jika token tidak ada, redirect ke login
+      if (!token) {
+        window.location.href = 'index.html';
+        return;
+      }
+
+      try {
+        // Kirim request GET ke /dashboard dengan header Authorization: Bearer <token>
+        const res = await fetch('/dashboard', {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        });
+
+        // Parsing response JSON dari server
+        const data = await res.json();
+
+        if (res.ok) {
+          // Jika berhasil, tampilkan pesan sukses dan data user
+          resultEl.style.background = '#d4edda';
+          resultEl.style.color = '#155724';
+          resultEl.innerText = '✅ ' + data.message + '\n\nUser: ' + JSON.stringify(data.user, null, 2);
+        } else {
+          // Jika gagal (token expired atau invalid)
+          resultEl.style.background = '#f8d7da';
+          resultEl.style.color = '#721c24';
+          resultEl.innerText = '❌ ' + (data.message || 'Akses ditolak');
+
+          // Jika status 403 (Forbidden), hapus token dan redirect ke login setelah 2 detik
+          if (res.status === 403) {
+            setTimeout(() => {
+              localStorage.removeItem('token');
+              window.location.href = 'index.html';
+            }, 2000);
+          }
+        }
+      } catch (err) {
+        // Tangani error jaringan
+        resultEl.style.background = '#f8d7da';
+        resultEl.style.color = '#721c24';
+        resultEl.innerText = '❌ Gagal terhubung ke server.';
+      }
+    }
+
+    /**
+     * Fungsi logout.
+     * Menghapus token dari localStorage dan mengembalikan user ke halaman login.
+     */
+    function logout() {
+      localStorage.removeItem('token');
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>
