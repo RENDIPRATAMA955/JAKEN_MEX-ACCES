@@ -1,8 +1,9 @@
-# TODO - Default User dari .env
+# TODO - Fix Deployment Issues
 
-- [x] 1. Baca dan pahami struktur server.js & .env
-- [x] 2. Edit .env → tambahkan DEFAULT_USERNAME & DEFAULT_PASSWORD
-- [x] 3. Edit server.js → tambahkan kode inisialisasi default user saat startup
-- [x] 4. Update README.md → dokumentasikan fitur default user
-- [x] 5. Test server untuk memastikan tidak ada error
+- [x] Update server.js: dynamic port + SECRET_KEY fallback
+- [x] Create .env.example
+- [x] Update package.json: add engines field
+- [x] Update README.md: add deployment guide
+- [x] Create Procfile (optional but helpful)
+
 

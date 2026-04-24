@@ -83,6 +83,46 @@ JAKEN_MEX-ACCES/
 | POST   | /login      | Login dan dapatkan token JWT           | ❌   |
 | GET    | /dashboard  | Akses dashboard (return JSON)          | ✅   |
 
+## Deploy ke Platform Hosting (Render / Railway / Heroku)
+
+Project ini sudah siap deploy. Berikut yang perlu diperhatikan:
+
+### 1. Environment Variables
+
+Di panel dashboard platform deploy, tambahkan **Environment Variables** berikut:
+
+| Variable         | Nilai Contoh         | Keterangan                          |
+|------------------|----------------------|-------------------------------------|
+| `SECRET_KEY`     | `rahasia_jaken_123`  | **WAJIB** — kunci rahasia JWT       |
+| `DEFAULT_USERNAME`| `admin`             | Opsional — akun default             |
+| `DEFAULT_PASSWORD`| `admin123`          | Opsional — password default         |
+
+> ⚠️ **WAJIB:** Pastikan `SECRET_KEY` diisi! Kalau tidak, server tetap jalan tapi pakai fallback default (kurang aman untuk production).
+
+### 2. Build / Start Command
+
+Platform akan otomatis membaca file `Procfile` dan menjalankan:
+
+```
+web: node server.js
+```
+
+Atau pakai start script dari `package.json`:
+
+```bash
+npm start
+```
+
+### 3. Port Otomatis
+
+Server sekarang menggunakan port dinamis:
+
+```javascript
+const PORT = process.env.PORT || 3000;
+```
+
+Jadi platform deploy bisa assign port apa saja tanpa error.
+
 ## Penjelasan Error "Cannot GET /"
 
 Error ini muncul karena beberapa alasan berikut:

@@ -13,6 +13,17 @@ const bcryptjs = require("bcryptjs");    // Library untuk hashing password (pure
 const jwt = require("jsonwebtoken");     // Library untuk membuat dan verifikasi JWT token
 require("dotenv").config();              // Memuat environment variable dari file .env
 
+// ============================================
+// KONFIGURASI DEPLOY
+// ============================================
+// Gunakan PORT dari environment variable (untuk deploy platform),
+// jika tidak ada, fallback ke 3000 (untuk local development)
+const PORT = process.env.PORT || 3000;
+
+// Fallback SECRET_KEY jika tidak di-set di environment variable
+// Untuk production, wajib set SECRET_KEY di panel deploy!
+const SECRET_KEY = process.env.SECRET_KEY || "default_secret_jaken_dev";
+
 // Inisialisasi aplikasi Express
 const app = express();
 
@@ -82,8 +93,8 @@ function authenticateToken(req, res, next) {
     return res.status(403).json({ message: "Akses ditolak: format token salah" });
   }
 
-  // Verifikasi token menggunakan SECRET_KEY dari .env
-  jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
+  // Verifikasi token menggunakan SECRET_KEY
+  jwt.verify(token, SECRET_KEY, (err, decoded) => {
     // Jika terjadi error saat verifikasi (token expired atau invalid)
     if (err) {
       return res.status(403).json({ message: "Akses ditolak: token tidak valid" });
@@ -191,7 +202,7 @@ app.post("/login", async (req, res) => {
   // Token akan expired setelah 1 jam (3600 detik)
   const token = jwt.sign(
     { username: user.username },
-    process.env.SECRET_KEY,
+    SECRET_KEY,
     { expiresIn: "1h" }
   );
 
@@ -254,10 +265,10 @@ app.get("/dashboard", authenticateToken, (req, res) => {
 // ============================================
 // MENJALANKAN SERVER
 // ============================================
-// Server akan berjalan di port 3000
-// Buka browser dan akses http://localhost:3000
-app.listen(3000, () => {
-  console.log("✅ Server berjalan di http://localhost:3000");
+// Server akan berjalan di PORT yang ditentukan environment variable
+// atau fallback ke 3000 untuk local development
+app.listen(PORT, () => {
+  console.log(`✅ Server berjalan di port ${PORT}`);
   console.log("📌 Endpoint yang tersedia:");
   console.log("   POST /register  → Daftar akun baru");
   console.log("   POST /login     → Login dan dapatkan token");

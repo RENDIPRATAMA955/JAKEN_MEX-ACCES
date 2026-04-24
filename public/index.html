@@ -245,8 +245,8 @@
         if (mode === 'login') {
           // Simpan token JWT ke localStorage agar bisa dipakai nanti
           localStorage.setItem('token', data.token);
-          // Redirect ke situs JAKENS_PUBLIC
-          window.location.href = 'https://rendipratama955.github.io/JAKENS_PUBLIC/';
+          // Redirect ke dashboard lokal
+          window.location.href = './dashboard.html';
         } else {
           // Jika register berhasil, tampilkan pesan sukses dan beralih ke mode login
           msgEl.className = 'success';
