@@ -1,0 +1,28 @@
+{
+  "name": "jaken_mex-acces",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RENDIPRATAMA955/JAKEN_MEX-ACCES.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/RENDIPRATAMA955/JAKEN_MEX-ACCES/issues"
+  },
+  "homepage": "https://github.com/RENDIPRATAMA955/JAKEN_MEX-ACCES#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3"
+  }
+}

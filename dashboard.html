@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <h2>Dashboard</h2>
+
+  <button onclick="getData()">Cek Akses</button>
+  <p id="result"></p>
+
+  <script>
+    async function getData() {
+      const token = localStorage.getItem("token");
+
+      const res = await fetch("/dashboard", {
+        headers: { "Authorization": token }
+      });
+
+      const text = await res.text();
+      result.innerText = text;
+    }
+  </script>
+</body>
+</html>
